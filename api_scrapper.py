@@ -56,7 +56,7 @@ class ApiScrapper:
         end = 149
         total_requests = 0
 
-        while total_requests < 20:
+        while total_requests < 30:
 
             # if total_requests % 20 == 0 and total_requests != 0:
             #     print("Pausing for 1 minute to avoid rate limits...")
@@ -64,6 +64,7 @@ class ApiScrapper:
 
 
             token_info = self.generate_access_token()
+            time.sleep(5)
             if 'access_token' in token_info:
                 access_token = token_info['access_token']
                 offers = self.extract_data(access_token, start, end)
@@ -90,7 +91,7 @@ class ApiScrapper:
 
         # Save all offers to a JSON file
         with open(file_name, 'w', encoding='utf-8') as file:
-            json.dump(all_offers, file, indent=4)
+            json.dump(all_offers, file, ensure_ascii=False, indent=4)
 
         print(len(all_offers))
 
