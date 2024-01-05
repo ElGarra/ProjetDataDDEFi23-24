@@ -1,5 +1,3 @@
-
-
 # Livrable intermédiaire sur l'Extraction de Données d'Offres d'Emploi
 
 1. **Contexte et Besoin Business :**
@@ -10,6 +8,7 @@
 
 3. **Approche :**
    La méthodologie pour atteindre cet objectif comprend :
+
    - Extraction des Données : Utilisation de l'API Pôle Emploi pour collecter des offres d'emploi.
    - Nettoyage et Prétraitement des Données : Mise l'accent sur la standardisation, le traitement des données manquantes et le nettoyage des informations textuelles.
    - Ingénierie des Caractéristiques : Identification des caractéristiques clés des offres d'emploi pour le modèle ML.
@@ -19,7 +18,6 @@
 
 4. **Observations / Tests Initiaux :**
    Un examen initial des données révèle une riche variété d'attributs, les champs critiques étant le titre de l'emploi, la description et les compétences. Cependant, actuellement, nous sommes confrontés à une limitation avec la limite de taux de l'API, qui nous restreint à 20 requêtes avant de rencontrer un échec, résultant en un total de seulement 3150 offres d'emploi. Ce nombre est bien inférieur aux 30 000 offres souhaitées pour une formation et un test complets du modèle. Pour y remédier, il pourrait être nécessaire d'explorer des stratégies de collecte de données efficaces dans les contraintes de l'API ou de rechercher des sources alternatives pour augmenter notre jeu de données. La complexité des données textuelles nécessitera des techniques avancées de PNL pour extraire efficacement des caractéristiques, ce qui est crucial pour la précision du modèle dans la prédiction des secteurs d'emploi.
-
 
 ## Lien vers le Repo Contenant le Code
 
@@ -111,3 +109,4 @@ Voici un exemple d'offre d'emploi obtenue après avoir effectué une requête à
         "offresManqueCandidats": false
     }
 ```
+
