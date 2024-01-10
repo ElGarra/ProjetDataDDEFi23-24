@@ -1,19 +1,16 @@
+from dotenv import load_dotenv
 import os
-# from dotenv import load_dotenv
 import requests
 import json
 import time
 
 class ApiScrapper:
     def __init__(self):
-        # load_dotenv()  # Load the environment variables from .env file
-        # self.client_id = os.getenv('CLIENT_ID')
-        # self.client_secret = os.getenv('CLIENT_SECRET')
-        # self.scope = os.getenv('SCOPE')
-        # print(self.client_id, "\n", self.client_secret, "\n", self.scope)
-        self.client_id = "PAR_projetdata2324_771b276340f58eae3c483747cf0ab4104e76ac354855b57ae2e22bd07495b4dd"
-        self.client_secret = "18c07536cce9ea0d94216fca2181efa18561c599119af21a115a2073d10089fe"
-        self.scope = "api_offresdemploiv2 application_PAR_projetdata2324_771b276340f58eae3c483747cf0ab4104e76ac354855b57ae2e22bd07495b4dd o2dsoffre"
+        load_dotenv()  # Load the environment variables from .env file
+        self.client_id = str(os.getenv('CLIENT_ID'))
+        self.client_secret = str(os.getenv('CLIENT_SECRET'))
+        self.scope = str(os.getenv('SCOPE'))
+        print(self.client_id, "\n", self.client_secret, "\n", self.scope)
         self.request_count = 0
 
     def generate_access_token(self):
@@ -56,13 +53,7 @@ class ApiScrapper:
         end = 149
         total_requests = 0
 
-        while total_requests < 30:
-
-            # if total_requests % 20 == 0 and total_requests != 0:
-            #     print("Pausing for 1 minute to avoid rate limits...")
-            #     time.sleep(60)  # Pause for 1 minute
-
-
+        while total_requests < 1:
             token_info = self.generate_access_token()
             time.sleep(5)
             if 'access_token' in token_info:
