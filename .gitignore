@@ -1,3 +1,4 @@
 .env
 virtualenv/
 all_offers.json
+offers_log.txt
