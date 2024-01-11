@@ -2,3 +2,4 @@
 virtualenv/
 offers.json
 offers_log.txt
+data.json
