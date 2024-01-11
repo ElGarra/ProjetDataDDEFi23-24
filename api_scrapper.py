@@ -35,33 +35,6 @@ class ApiScrapper:
             return None
         return response.json()
 
-    # def extract_data(self, access_token, start, end):
-    #     iso_start = start.isoformat() + "Z"
-    #     iso_end = end.isoformat() + "Z"
-    #     print(iso_start, iso_end)
-    #     url = 'https://api.emploi-store.fr/partenaire/offresdemploi/v2/offres/search'
-    #     headers = {"Authorization": "Bearer " + access_token, "Content-Type": "application/json"}
-    #     params = {
-    #         "minCreationDate": iso_start,
-    #         "minCreationDate": iso_end,
-    #     }
-
-    #     response = requests.get(url, headers=headers, params=params)
-
-    #     self.request_count += 1
-    #     print(f"> Request N° {self.request_count}")
-    #     print(f"Status: {response.status_code}")
-
-    #     if response.status_code == 206 or response.status_code == 200:
-    #         return response.json()['resultats']
-    #     else:
-    #         try:
-    #             error_details = response.json()
-    #             print(f"Error details: {error_details}")
-    #         except ValueError:
-    #             print(f"Error: {response.status_code}, Response: {response.text}")
-    #         return None
-
     def extract_data(self, access_token, start, end):
         iso_start = urllib.parse.quote(start.isoformat(timespec='seconds') + "Z")
         iso_end = urllib.parse.quote(end.isoformat(timespec='seconds') + "Z")
@@ -86,86 +59,6 @@ class ApiScrapper:
             except ValueError:
                 print(f"Error: {response.status_code}, Response: {response.text}")
             return None
-
-        
-    # def collect_all_offers(self):
-    #     all_offers = []
-    #     start = datetime(2021, 1, 1)
-    #     end = datetime(2022, 1, 1)
-    #     total_requests = 0
-
-    #     while total_requests < 2:
-    #         token_info = self.generate_access_token()
-    #         if 'access_token' in token_info:
-    #             access_token = token_info['access_token']
-    #             offers = self.extract_data(access_token, start, end)
-                
-    #             if isinstance(offers, list):
-    #                 all_offers.extend(offers)
-    #                 start += timedelta(days=365)
-    #                 end += timedelta(days=365)
-    #             else:
-    #                 print("Error in request:", offers)
-    #                 break
-    #         else:
-    #             print("Error obtaining access token")
-    #             break
-
-    #         total_requests += 1
-
-    #     # Guardar todas las ofertas en un archivo JSON
-    #     file_name = 'all_offers.json'
-    #     if os.path.isfile(file_name):
-    #         with open(file_name, 'r', encoding='utf-8') as file:
-    #             existing_offers = json.load(file)
-    #         all_offers.extend(existing_offers)
-
-    #     with open(file_name, 'w', encoding='utf-8') as file:
-    #         json.dump(all_offers, file, ensure_ascii=False, indent=4)
-
-    #     print(len(all_offers))
-
-    #     return all_offers
-        
-    # def collect_all_offers(self):
-    #     all_offers = []
-    #     start = datetime(2010, 1, 1)
-    #     end = datetime(2010, 1, 15)
-    #     total_requests = 0
-
-    #     while total_requests < 96:
-    #         print(f"Extracting offers from {start} to {end}")
-    #         token_info = self.generate_access_token()
-    #         if token_info and 'access_token' in token_info:
-    #             access_token = token_info['access_token']
-    #             offers = self.extract_data(access_token, start, end)
-                
-    #             if offers is not None:  # Si hay ofertas o la respuesta es una lista vacía
-    #                 print(f"{len(offers)} offers found...")
-    #                 all_offers.extend(offers)
-
-    #             # Incrementa las fechas independientemente de si hay ofertas o no
-    #             start += timedelta(days=15)
-    #             end += timedelta(days=15)
-    #         else:
-    #             print("Error obtaining access token")
-    #             break
-
-    #         total_requests += 1
-
-    #     # Guardar todas las ofertas en un archivo JSON
-    #     file_name = 'all_offers.json'
-    #     if os.path.isfile(file_name):
-    #         with open(file_name, 'r', encoding='utf-8') as file:
-    #             existing_offers = json.load(file)
-    #         all_offers.extend(existing_offers)
-
-    #     with open(file_name, 'w', encoding='utf-8') as file:
-    #         json.dump(all_offers, file, ensure_ascii=False, indent=4)
-
-    #     print(len(all_offers))
-
-    #     return all_offers
 
     def collect_all_offers(self):
         all_offers = []
