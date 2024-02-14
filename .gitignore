@@ -1,5 +1,5 @@
 .env
 virtualenv/
-offers.json
-offers_log.txt
+assets/
 data.json
+field_percentage_report.txt
