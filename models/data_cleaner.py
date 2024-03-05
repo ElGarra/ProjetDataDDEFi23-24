@@ -34,6 +34,7 @@ class DataCleaner:
     def field_percentage_report(self):
         field_count = defaultdict(int)
         total_entries = len(self.data)
+        self.missing_data = []
 
         def count_fields(entry, prefix='', list_count=1):
             for key, value in entry.items():
@@ -53,11 +54,21 @@ class DataCleaner:
             for field, count in field_count.items():
                 percentage = (count / total_entries) * 100
                 file.write(f"{field}: {percentage:.2f}%\n")
+                if ( count / total_entries ) < 0.35:
+                    self.missing_data.append(field)
+                    # print(f"{field}: {percentage:.2f}%\n")
+        
+    def delete_missing_data(self, new_filepath):
+        with open(new_filepath, 'r', encoding='utf-8') as file:
+            self.non_duplicate_data = json.load(file)
+        print(self.non_duplicate_data[0])
+
 
 # Uso de la clase
 cleaner = DataCleaner('../assets/offers.json')
-cleaner.remove_duplicates()
-cleaner.save_clean_data('../assets/non_duplicates_offers.json')
-cleaner.field_percentage_report()
+# cleaner.remove_duplicates()
+# cleaner.save_clean_data('../assets/non_duplicates_offers.json')
+# cleaner.field_percentage_report()
+cleaner.delete_missing_data('../assets/non_duplicates_offers.json')
 
 

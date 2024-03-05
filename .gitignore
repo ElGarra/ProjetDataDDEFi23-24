@@ -3,3 +3,4 @@ virtualenv/
 assets/
 data.json
 field_percentage_report.txt
+aux_files/
