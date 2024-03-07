@@ -2,6 +2,7 @@ import json
 from collections import defaultdict
 
 class DataCleaner:
+
     @staticmethod
     def load_data(filepath):
         with open(filepath, 'r', encoding='utf-8') as file:
@@ -24,7 +25,6 @@ class DataCleaner:
                     file.write(json.dumps(f"Offer {duplicate['id']} duplicated", ensure_ascii=False) + '\n')
 
         return list(unique_data.values())
-
 
     @staticmethod
     def calculate_field_percentage(data):
@@ -59,7 +59,6 @@ class DataCleaner:
         field_percentage = {field: (count / total_entries) * 100 for field, count in field_count.items()}
         return field_percentage
 
-
     @staticmethod
     def generate_field_percentage_report(field_percentage):
         report = "Field Appearance Percentage Report\n=================================\n\n"
@@ -90,7 +89,6 @@ class DataCleaner:
         elif fields[0] in dict_:
             del dict_[fields[0]]
 
-
     @staticmethod
     def delete_field_from_data(data, field_to_delete):
         def delete_field(dict_, fields):
@@ -118,19 +116,36 @@ class DataCleaner:
         with open(new_filepath, 'w', encoding='utf-8') as file:
             json.dump(data, file, ensure_ascii=False, indent=4)
 
-# Flujo de trabajo
-cleaner = DataCleaner()
-data = cleaner.load_data('../assets/offers.json')
-unique_data = cleaner.remove_duplicates(data)
-field_percentage = cleaner.calculate_field_percentage(unique_data)
-initial_report = cleaner.generate_field_percentage_report(field_percentage)
-with open('../assets/initial_percentage_report.txt', 'w', encoding='utf-8') as file:
-    file.write(initial_report)
-filtered_data = cleaner.filter_fields_by_percentage(unique_data, field_percentage, 32)
-cleaner.delete_field_from_data(filtered_data, 'origineOffre')
-new_field_percentage = cleaner.calculate_field_percentage(filtered_data)
-final_report = cleaner.generate_field_percentage_report(new_field_percentage)
-with open('../assets/final_percentage_report.txt', 'w', encoding='utf-8') as file:
-    file.write(final_report)
-cleaner.save_clean_data(filtered_data, '../assets/cleaned_offers.json')
+    @staticmethod
+    def process_data(filepath):
+        # Carga los datos
+        data = DataCleaner.load_data(filepath)
+
+        # Elimina duplicados
+        unique_data = DataCleaner.remove_duplicates(data)
+
+        # Calcula el porcentaje de aparición de cada campo
+        field_percentage = DataCleaner.calculate_field_percentage(unique_data)
+        initial_report = DataCleaner.generate_field_percentage_report(field_percentage)
+        with open(filepath.replace('.json', '_initial_percentage_report.txt'), 'w', encoding='utf-8') as file:
+            file.write(initial_report)
+
+        # Filtra campos por porcentaje de aparición
+        filtered_data = DataCleaner.filter_fields_by_percentage(unique_data, field_percentage, 32)
+
+        # Elimina cualquier campo específico no deseado
+        DataCleaner.delete_field_from_data(filtered_data, 'origineOffre')
+
+        # Calcula de nuevo el porcentaje de aparición de cada campo después de la limpieza adicional
+        new_field_percentage = DataCleaner.calculate_field_percentage(filtered_data)
+        final_report = DataCleaner.generate_field_percentage_report(new_field_percentage)
+        with open(filepath.replace('.json', '_final_percentage_report.txt'), 'w', encoding='utf-8') as file:
+            file.write(final_report)
+
+        # Guarda los datos limpios y procesados
+        new_filepath = filepath.replace('.json', '_cleaned.json')
+        DataCleaner.save_clean_data(filtered_data, new_filepath)
+        return data
+
+
 
