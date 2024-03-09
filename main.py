@@ -1,5 +1,8 @@
 from models.cleaner import DataCleaner
+from models.feature_engineering import FeatureEngineering
 
 if __name__ == "__main__":
-    filepath = 'assets/offers.json'  # Ajusta la ruta al archivo
-    DataCleaner.process_data(filepath)
+    first_filepath = 'assets/offers.json'  
+    DataCleaner.process_data(first_filepath)
+    second_filepath = 'assets/offers_cleaned.json'  
+    FeatureEngineering.apply_feature_engineering(second_filepath)
