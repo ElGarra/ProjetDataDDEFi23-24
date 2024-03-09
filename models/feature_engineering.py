@@ -44,8 +44,34 @@ class FeatureEngineering:
 
     @staticmethod
     def tokenize_and_lemmatize(data, text_fields):
-        pass
-        # Aquí iría la implementación de tokenize_and_lemmatize tal como se detalló anteriormente.
+        total_items = len(data)
+        print_every = 100  # Ajusta este valor según la frecuencia con la que quieres ver el progreso
+
+        for index, item in enumerate(data):
+            if (index + 1) % print_every == 0:
+                print(f"Procesando {index + 1} de {total_items} items...")
+
+            for field in text_fields:
+                # Comprueba si el campo existe en el diccionario y si es una cadena
+                if field in item and isinstance(item[field], str):
+                    doc = nlp(item[field])
+                    # Extrae los lemas de los tokens y une los tokens en una cadena separada por espacios
+                    item[field] = " ".join([token.lemma_ for token in doc])
+                # Procesamiento para campos anidados, como 'entreprise.description'
+                elif '.' in field:
+                    subfields = field.split('.')
+                    current_level = item
+                    for i, subfield in enumerate(subfields[:-1]):
+                        if subfield in current_level:
+                            current_level = current_level[subfield]
+                        else:
+                            current_level = None
+                            break
+                    final_field = subfields[-1]
+                    if current_level and final_field in current_level and isinstance(current_level[final_field], str):
+                        doc = nlp(current_level[final_field])
+                        current_level[final_field] = " ".join([token.lemma_ for token in doc])
+        print("Tokenización y lematización completadas.")
 
     @staticmethod
     def save_clean_data(data, new_filepath):
@@ -54,17 +80,10 @@ class FeatureEngineering:
 
     @staticmethod
     def apply_feature_engineering(filepath):
-        """
-        Applies text normalization and tokenization-lemmatization to specified fields in the dataset.
-        
-        Parameters:
-        - data (list): List of dictionaries representing the dataset.
-        - fields_to_process (list): List of fields to be processed.
-        """
 
         data = FeatureEngineering.load_data(filepath)
         FeatureEngineering.normalize_field(data, ['intitule', 'description', 'romeLibelle', 'appellationlibelle', 'entreprise.nom','entreprise.description', 'competences', 'qualificationLibelle', 'secteurActiviteLibelle', 'salaire.libelle'])
-        # FeatureEngineering.tokenize_and_lemmatize(data, fields_to_process)
+        FeatureEngineering.tokenize_and_lemmatize(data, ['description', 'entreprise.description'])
 
         new_filepath = filepath.replace('.json', '_fe.json')
         FeatureEngineering.save_clean_data(data, new_filepath)
